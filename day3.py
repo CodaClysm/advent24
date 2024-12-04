@@ -8,7 +8,7 @@ def get_data(data_path: str) -> str:
     return data
 
 
-def parse_memory(data: str, alwaysEnable: bool) -> int:
+def parse_memory(data: str, always_enable: bool) -> int:
     sum = 0
 
     # mul() regex
@@ -27,7 +27,7 @@ def parse_memory(data: str, alwaysEnable: bool) -> int:
             factors = re.search("[0-9]+,[0-9]+", command[0])
             lhs, rhs = [int(factor) for factor in factors.group().split(",")]
             product = lhs * rhs
-            if enabled or alwaysEnable:
+            if enabled or always_enable:
                 sum += product
         elif command[1]:
             # command is a do command
