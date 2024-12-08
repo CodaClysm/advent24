@@ -13,6 +13,10 @@ def get_data(data_path: str) -> Tuple[List[int], List[List[int]]]:
 
 def recursive_solve(result: int, inputs: List[int], current_val: int, allow_concat: bool) -> bool:
     # base case:
+    if current_val > result:
+        # early exit. No operators allow value to decrease
+        return False
+
     if len(inputs) == 0:
         # no more branches. If the current_val is the desired result, return true.
         return current_val == result
