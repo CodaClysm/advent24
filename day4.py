@@ -27,10 +27,10 @@ def search_squiggle(data: List[str], search_word: str, current_position: Tuple[i
             for i in range(-1, 2):
                 for j in range(-1, 2):
                     new_row = current_position[0] + i
-                    new_col = current_position[0] + j
+                    new_col = current_position[1] + j
                     if (0 <= new_row < len(data)) and (0 <= new_col < len(data[new_row])):
                         new_position = (new_row, new_col)
-                        num_found += search(data, search_word, new_position, search_letter_index + 1)
+                        num_found += search_squiggle(data, search_word, new_position, search_letter_index + 1)
             return num_found
 
 def search(data: List[str], search_word: str) -> int:
