@@ -1,5 +1,6 @@
 from typing import List, Tuple, Dict
 import time
+from multiprocessing import Pool
 
 def get_data(data_path: str) -> List[int]:
     data = []
@@ -34,30 +35,42 @@ def part_1(stones: List[int]) -> None:
     print("Part 1 --", len(new_stones))
     return
 
+def thread_it(inputs):
+    stone, map_25_count, map_25_list = inputs
+    total_stones = 0
+    if stone not in map_25_count:
+        blink_list = blink([stone], 25)
+        map_25_count[stone] = len(blink_list)
+        map_25_list[stone] = blink_list
+
+    for stone_2 in map_25_list[stone]:
+        if stone_2 not in map_25_count:
+            blink_list = blink([stone_2], 25)
+            map_25_count[stone_2] = len(blink_list)
+            map_25_list[stone_2] = blink_list
+
+        total_stones += map_25_count[stone_2]
+    return total_stones
+
 def part_2(stones: List[int]) -> None:
     stones_25 = blink(stones, 25)
     map_25_count = {}
     map_25_list = {}
     total_stones = 0
-    for progress, stone in enumerate(stones_25):
+
+    for stone in stones_25:
         if stone not in map_25_count:
             blink_list = blink([stone], 25)
             map_25_count[stone] = len(blink_list)
             map_25_list[stone] = blink_list
 
-        for stone_2 in map_25_list[stone]:
-            if stone_2 not in map_25_count:
-                blink_list = blink([stone_2], 25)
-                map_25_count[stone_2] = len(blink_list)
-                map_25_list[stone_2] = blink_list
-
-            total_stones += map_25_count[stone_2]
+    with Pool(30) as p:
+        total_stones = sum(p.map(thread_it, [(stone, map_25_count, map_25_list) for stone in stones_25]))
 
     print("Part 2 --", total_stones)
     return
 
 data = get_data("inputs/input11.txt")
-data = get_data("inputs/sample.txt")
 start = time.time()
 part_1(data)
 part_2(data)
