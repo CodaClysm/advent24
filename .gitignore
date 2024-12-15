@@ -2,3 +2,4 @@ template.py
 personalNotes.txt
 .venv/
 tree.txt
+*/__pycache__/*
